@@ -139,6 +139,7 @@
           display: flex;
           justify-content: space-between;
           align-items: center;
+          flex-shrink: 0;
         }
         
         .bidirectional-header h3 {
@@ -168,6 +169,8 @@
           display: flex;
           flex-direction: column;
           gap: 12px;
+          min-height: 0;
+          max-height: calc(500px - 120px);
         }
         
         .bidirectional-message {
@@ -213,6 +216,8 @@
           border-top: 1px solid #e0e0e0;
           display: flex;
           gap: 8px;
+          flex-shrink: 0;
+          background: white;
         }
         
         .bidirectional-input input {
@@ -431,6 +436,11 @@
     
     addMessage(text, sender) {
       const messagesContainer = this.chatPopup.querySelector('#bidirectional-messages');
+      if (!messagesContainer) {
+        console.error('Messages container not found');
+        return null;
+      }
+      
       const messageDiv = document.createElement('div');
       messageDiv.className = `bidirectional-message ${sender}-message`;
       
@@ -446,6 +456,7 @@
       messageDiv.appendChild(timeDiv);
       messagesContainer.appendChild(messageDiv);
       
+      console.log(`Added ${sender} message:`, text);
       this.scrollToBottom();
       return messageDiv;
     }
@@ -480,7 +491,12 @@
     
     scrollToBottom() {
       const messagesContainer = this.chatPopup.querySelector('#bidirectional-messages');
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      if (messagesContainer) {
+        // Use setTimeout to ensure DOM is updated
+        setTimeout(() => {
+          messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }, 10);
+      }
     }
     
     loadInitialMessage() {
