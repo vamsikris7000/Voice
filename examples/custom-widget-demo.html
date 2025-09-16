@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Chatbot Widget Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        .code-block {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: left;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .button {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 10px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        .feature-card {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        .feature-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .feature-description {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        .demo-controls {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 12px;
+            margin: 40px 0;
+            backdrop-filter: blur(10px);
+        }
+        .control-button {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        .control-button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Custom Chatbot Widget</h1>
+        <p class="subtitle">Beautiful, embeddable chatbot with AI-Human escalation</p>
+        
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <div class="feature-title">Beautiful Design</div>
+                <div class="feature-description">
+                    Modern, responsive UI with smooth animations and professional styling.
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <div class="feature-title">AI + Human</div>
+                <div class="feature-description">
+                    AI chat with automatic escalation to human agents when needed.
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-title">Easy Integration</div>
+                <div class="feature-description">
+                    One script tag integration, works on any website.
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🔧</div>
+                <div class="feature-title">Fully Customizable</div>
+                <div class="feature-description">
+                    Custom colors, positions, messages, and behavior options.
+                </div>
+            </div>
+        </div>
+        
+        <h2>🚀 Quick Integration</h2>
+        <p>Add this single script tag to your website:</p>
+        <div class="code-block">
+&lt;script 
+    src="https://widgetbot.netlify.app/custom-embed.js"
+    data-backend-url="https://bidirectional-backend-production.up.railway.app"
+    data-position="bottom-right"
+    data-primary-color="#667eea"
+    data-welcome-message="Hi! How can I help you today?"
+    data-auto-open="false"&gt;
+&lt;/script&gt;
+        </div>
+        
+        <h2>🎨 Customization Options</h2>
+        <div class="code-block">
+&lt;script 
+    src="https://widgetbot.netlify.app/custom-embed.js"
+    data-backend-url="https://bidirectional-backend-production.up.railway.app"
+    data-position="bottom-left"
+    data-primary-color="#e53e3e"
+    data-welcome-message="Welcome! I'm here to help."
+    data-auto-open="true"
+    data-enable-escalation="true"
+    data-escalation-keywords="human,agent,help,support"&gt;
+&lt;/script&gt;
+        </div>
+        
+        <h2>🔧 Programmatic Control</h2>
+        <div class="code-block">
+// Open the chatbot
+openCustomChatbot();
+
+// Close the chatbot
+closeCustomChatbot();
+
+// Send a message programmatically
+sendCustomChatMessage('Hello from JavaScript!');
+
+// Listen for events
+document.addEventListener('customChatbotReady', (event) => {
+    console.log('Custom chatbot is ready!', event.detail.widget);
+});
+        </div>
+        
+        <div class="demo-controls">
+            <h3>🎮 Demo Controls</h3>
+            <p>Try these controls to test the widget:</p>
+            <button class="control-button" onclick="openCustomChatbot()">Open Chatbot</button>
+            <button class="control-button" onclick="closeCustomChatbot()">Close Chatbot</button>
+            <button class="control-button" onclick="sendCustomChatMessage('Hello from demo!')">Send Test Message</button>
+            <button class="control-button" onclick="sendCustomChatMessage('I need to speak to a human agent')">Test Escalation</button>
+        </div>
+        
+        <h2>📋 Configuration Options</h2>
+        <div style="text-align: left; max-width: 600px; margin: 0 auto;">
+            <ul style="line-height: 2;">
+                <li><strong>data-backend-url</strong> - Your backend server URL (required)</li>
+                <li><strong>data-position</strong> - Widget position (bottom-right, bottom-left, top-right, top-left)</li>
+                <li><strong>data-primary-color</strong> - Primary color for the widget</li>
+                <li><strong>data-welcome-message</strong> - Initial welcome message</li>
+                <li><strong>data-auto-open</strong> - Auto-open on page load (true/false)</li>
+                <li><strong>data-enable-escalation</strong> - Enable human escalation (true/false)</li>
+                <li><strong>data-escalation-keywords</strong> - Keywords that trigger escalation</li>
+            </ul>
+        </div>
+        
+        <div style="margin-top: 40px;">
+            <a href="vapi-style-usage.html" class="button">📖 Vapi-Style Widget</a>
+            <a href="basic-usage.html" class="button">📖 Basic Usage</a>
+            <a href="custom-styling.html" class="button">🎨 Custom Styling</a>
+            <a href="../README.md" class="button">📚 Documentation</a>
+        </div>
+    </div>
+    
+    <!-- Custom Chatbot Widget -->
+    <script 
+        src="custom-embed.js"
+        data-backend-url="https://bidirectional-backend-production.up.railway.app"
+        data-position="bottom-right"
+        data-primary-color="#667eea"
+        data-welcome-message="Hi! I'm your AI assistant. How can I help you today? Try asking for a human agent!"
+        data-auto-open="false"
+        data-enable-escalation="true"
+        data-escalation-keywords="human,agent,help,support">
+    </script>
+</body>
+</html>
