@@ -10,7 +10,7 @@
     const script = document.currentScript;
     const config = {
         // Required
-        backendUrl: script.getAttribute('data-backend-url') || 'http://localhost:3001',
+        backendUrl: script.getAttribute('data-backend-url') || 'https://bidirectional-backend-production.up.railway.app',
         
         // Optional
         position: script.getAttribute('data-position') || 'bottom-right',

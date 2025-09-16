@@ -10,7 +10,7 @@
     function getConfigFromElement(element) {
         return {
             // Required
-            backendUrl: element.getAttribute('backend-url') || 'http://localhost:3001',
+            backendUrl: element.getAttribute('backend-url') || 'https://bidirectional-backend-production.up.railway.app',
             
             // Vapi-style attributes
             publicKey: element.getAttribute('public-key'),
