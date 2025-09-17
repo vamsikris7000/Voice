@@ -370,9 +370,15 @@
     
     async sendMessage() {
       const inputField = this.chatPopup.querySelector('#bidirectional-input-field');
+      const sendButton = this.chatPopup.querySelector('#bidirectional-send');
       const message = inputField.value.trim();
       
       if (!message || this.isLoading) return;
+      
+      // Disable input and button while sending
+      inputField.disabled = true;
+      sendButton.disabled = true;
+      this.isLoading = true;
       
       // Add user message
       this.addMessage(message, 'user');
@@ -382,7 +388,6 @@
       this.showTypingIndicator();
       
       try {
-        this.isLoading = true;
         await this.sendToBackend(message);
       } catch (error) {
         console.error('Error sending message:', error);
@@ -390,6 +395,9 @@
       } finally {
         this.hideTypingIndicator();
         this.isLoading = false;
+        inputField.disabled = false;
+        sendButton.disabled = false;
+        this.focusInput();
       }
     }
     
@@ -403,6 +411,8 @@
     }
     
     async sendToDify(message) {
+      console.log('Sending to Dify API:', this.config.difyApiUrl);
+      
       const response = await fetch(`${this.config.difyApiUrl}/chat-messages`, {
         method: 'POST',
         headers: {
@@ -419,7 +429,9 @@
       });
       
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorText = await response.text();
+        console.error('Dify API Error:', response.status, errorText);
+        throw new Error(`Dify API error: ${response.status} - ${errorText}`);
       }
       
       const reader = response.body.getReader();
@@ -550,6 +562,13 @@
       messageDiv.appendChild(contentDiv);
       messageDiv.appendChild(timeDiv);
       messagesContainer.appendChild(messageDiv);
+      
+      // Store message in our messages array
+      this.messages.push({
+        role: sender,
+        content: text,
+        timestamp: new Date()
+      });
       
       console.log(`Added ${sender} message:`, text);
       this.scrollToBottom();
