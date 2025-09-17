@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Dify Widget - Direct Connection</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .test-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .test-section h2 {
+            color: #ffd700;
+            margin-top: 0;
+        }
+        
+        .code-block {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        
+        .test-steps {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .test-steps li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .test-steps li:before {
+            content: "🔍 ";
+            margin-right: 8px;
+        }
+        
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        
+        .status.success {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid #22c55e;
+            color: #22c55e;
+        }
+        
+        .status.error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #ef4444;
+        }
+        
+        .status.info {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid #3b82f6;
+            color: #3b82f6;
+        }
+        
+        .button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .console-log {
+            background: rgba(0, 0, 0, 0.5);
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Test Dify Widget - Direct Connection</h1>
+        
+        <div class="test-section">
+            <h2>📋 Test Configuration</h2>
+            <p>Testing direct connection to your Dify AI instance:</p>
+            <div class="code-block">
+Dify API URL: https://d22yt2oewbcglh.cloudfront.net/v1
+Dify API Key: app-dStnyyOE9dNP6CZb0lPg3kKF
+Widget Position: bottom-right
+Primary Color: #667eea
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🧪 Testing Steps</h2>
+            <ol class="test-steps">
+                <li>Click the chat widget button (bottom-right corner)</li>
+                <li>Verify the widget opens with "AI Assistant" header</li>
+                <li>Check that the initial message "Hello! How can I help you today?" is visible</li>
+                <li>Type a test message like "Hello, how are you?"</li>
+                <li>Click Send and wait for AI response</li>
+                <li>Verify the response appears in the chat area</li>
+                <li>Test multiple messages to ensure conversation flow</li>
+            </ol>
+        </div>
+        
+        <div class="test-section">
+            <h2>🔍 Debug Information</h2>
+            <div id="debug-info" class="console-log">
+                Waiting for widget to load...
+            </div>
+            <button class="button" onclick="testWidgetConnection()">Test Widget Connection</button>
+            <button class="button" onclick="clearDebugLog()">Clear Log</button>
+        </div>
+        
+        <div class="test-section">
+            <h2>✅ Expected Results</h2>
+            <ul class="test-steps">
+                <li>Widget should open without errors</li>
+                <li>Initial message should be visible</li>
+                <li>User messages should appear on the right</li>
+                <li>AI responses should appear on the left with streaming effect</li>
+                <li>No console errors should occur</li>
+                <li>Conversation should maintain context</li>
+            </ul>
+        </div>
+        
+        <div class="test-section">
+            <h2>🚨 Troubleshooting</h2>
+            <p>If you encounter issues:</p>
+            <ul class="test-steps">
+                <li>Check browser console for errors (F12 → Console)</li>
+                <li>Verify Dify API credentials are correct</li>
+                <li>Ensure Dify instance is accessible from your network</li>
+                <li>Check if CORS is properly configured on Dify</li>
+                <li>Try refreshing the page and testing again</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Test the widget with your Dify configuration -->
+    <script 
+        src="https://widgetbot.netlify.app/bidirectional-embed.js"
+        data-dify-api-url="https://d22yt2oewbcglh.cloudfront.net/v1"
+        data-dify-api-key="app-dStnyyOE9dNP6CZb0lPg3kKF"
+        data-position="bottom-right"
+        data-primary-color="#667eea">
+    </script>
+    
+    <script>
+        // Debug logging
+        function logToDebug(message, type = 'info') {
+            const debugDiv = document.getElementById('debug-info');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}\n`;
+            debugDiv.textContent += logEntry;
+            debugDiv.scrollTop = debugDiv.scrollHeight;
+            
+            // Also log to console
+            if (type === 'error') {
+                console.error(message);
+            } else if (type === 'success') {
+                console.log('✅', message);
+            } else {
+                console.log('ℹ️', message);
+            }
+        }
+        
+        function clearDebugLog() {
+            document.getElementById('debug-info').textContent = 'Debug log cleared...\n';
+        }
+        
+        function testWidgetConnection() {
+            logToDebug('Testing widget connection...');
+            
+            if (window.bidirectionalWidget) {
+                logToDebug('✅ Widget instance found', 'success');
+                logToDebug(`Widget config: ${JSON.stringify(window.bidirectionalWidget.config)}`);
+                
+                // Test opening the widget
+                try {
+                    window.bidirectionalWidget.open();
+                    logToDebug('✅ Widget opened successfully', 'success');
+                } catch (error) {
+                    logToDebug(`❌ Error opening widget: ${error.message}`, 'error');
+                }
+            } else {
+                logToDebug('❌ Widget instance not found', 'error');
+                logToDebug('Make sure the widget script loaded correctly');
+            }
+        }
+        
+        // Monitor widget loading
+        window.addEventListener('load', function() {
+            logToDebug('Page loaded, checking for widget...');
+            
+            setTimeout(() => {
+                if (window.bidirectionalWidget) {
+                    logToDebug('✅ Widget loaded successfully', 'success');
+                    logToDebug('Ready for testing!');
+                } else {
+                    logToDebug('❌ Widget not found after 2 seconds', 'error');
+                }
+            }, 2000);
+        });
+        
+        // Monitor for errors
+        window.addEventListener('error', function(e) {
+            logToDebug(`❌ JavaScript error: ${e.message}`, 'error');
+        });
+        
+        // Log when widget is initialized
+        const originalConsoleLog = console.log;
+        console.log = function(...args) {
+            if (args[0] && args[0].includes && args[0].includes('Bidirectional Widget')) {
+                logToDebug(args.join(' '), 'success');
+            }
+            originalConsoleLog.apply(console, args);
+        };
+    </script>
+</body>
+</html>
