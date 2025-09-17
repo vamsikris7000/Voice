@@ -103,9 +103,25 @@
         </div>
         
         <div class="demo-section">
+            <h2>🤖 Direct Dify Integration</h2>
+            <p>Connect directly to your own Dify AI instance:</p>
+            <div class="code-block">
+&lt;script 
+  src="https://widgetbot.netlify.app/bidirectional-embed.js"
+  data-dify-api-url="https://your-dify-instance.com/v1"
+  data-dify-api-key="app-your-dify-api-key"
+  data-position="bottom-right"
+  data-primary-color="#667eea"&gt;
+&lt;/script&gt;
+            </div>
+        </div>
+        
+        <div class="demo-section">
             <h2>⚙️ Configuration Options</h2>
             <ul class="feature-list">
-                <li><span class="highlight">data-backend-url</span> - Your backend URL (required)</li>
+                <li><span class="highlight">data-backend-url</span> - Your backend URL (required if not using Dify)</li>
+                <li><span class="highlight">data-dify-api-url</span> - Your Dify API URL (required if not using backend)</li>
+                <li><span class="highlight">data-dify-api-key</span> - Your Dify API key (required if not using backend)</li>
                 <li><span class="highlight">data-position</span> - Widget position: bottom-right, bottom-left, top-right, top-left, bottom-center</li>
                 <li><span class="highlight">data-primary-color</span> - Primary color for the widget (hex color)</li>
                 <li><span class="highlight">data-auto-open</span> - Auto-open widget on page load (true/false)</li>
@@ -133,6 +149,17 @@
   data-backend-url="https://bidirectional-backend-production.up.railway.app"
   data-theme="dark"
   data-auto-open="true"&gt;
+&lt;/script&gt;
+            </div>
+            
+            <h3>Using Your Dify Configuration</h3>
+            <div class="code-block">
+&lt;script 
+  src="https://widgetbot.netlify.app/bidirectional-embed.js"
+  data-dify-api-url="https://d22yt2oewbcglh.cloudfront.net/v1"
+  data-dify-api-key="app-dStnyyOE9dNP6CZb0lPg3kKF"
+  data-position="bottom-right"
+  data-primary-color="#667eea"&gt;
 &lt;/script&gt;
             </div>
         </div>

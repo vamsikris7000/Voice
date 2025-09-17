@@ -44,6 +44,8 @@
     // Extract configuration from data attributes
     const config = {
       backendUrl: currentScript.getAttribute('data-backend-url') || 'https://bidirectional-backend-production.up.railway.app',
+      difyApiUrl: currentScript.getAttribute('data-dify-api-url') || null,
+      difyApiKey: currentScript.getAttribute('data-dify-api-key') || null,
       position: currentScript.getAttribute('data-position') || 'bottom-right',
       primaryColor: currentScript.getAttribute('data-primary-color') || '#667eea',
       autoOpen: currentScript.getAttribute('data-auto-open') === 'true',
@@ -51,8 +53,8 @@
     };
     
     // Validate required configuration
-    if (!config.backendUrl) {
-      console.error('Bidirectional Widget: data-backend-url is required');
+    if (!config.backendUrl && (!config.difyApiUrl || !config.difyApiKey)) {
+      console.error('Bidirectional Widget: Either data-backend-url OR (data-dify-api-url and data-dify-api-key) is required');
       return;
     }
     

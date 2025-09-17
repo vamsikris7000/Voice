@@ -11,6 +11,8 @@
     constructor(config) {
       this.config = {
         backendUrl: config.backendUrl || 'https://bidirectional-backend-production.up.railway.app',
+        difyApiUrl: config.difyApiUrl || null,
+        difyApiKey: config.difyApiKey || null,
         position: config.position || 'bottom-right',
         primaryColor: config.primaryColor || '#667eea',
         autoOpen: config.autoOpen || false,
@@ -372,6 +374,79 @@
     }
     
     async sendToBackend(message) {
+      // Check if user has provided Dify configuration
+      if (this.config.difyApiUrl && this.config.difyApiKey) {
+        return await this.sendToDify(message);
+      } else {
+        return await this.sendToBackendProxy(message);
+      }
+    }
+    
+    async sendToDify(message) {
+      const response = await fetch(`${this.config.difyApiUrl}/chat-messages`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.config.difyApiKey}`
+        },
+        body: JSON.stringify({
+          query: message,
+          inputs: {},
+          user: this.userId,
+          conversation_id: this.conversationId || '',
+          response_mode: 'streaming'
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let botMessage = '';
+      let messageElement = null;
+      
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          
+          const chunk = decoder.decode(value);
+          const lines = chunk.split('\n');
+          
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              try {
+                const data = JSON.parse(line.slice(6));
+                
+                if (data.event === 'agent_message' && data.answer) {
+                  botMessage += data.answer;
+                  
+                  if (!messageElement) {
+                    this.hideTypingIndicator();
+                    messageElement = this.addMessage('', 'bot');
+                  }
+                  
+                  this.updateMessage(messageElement, botMessage);
+                }
+                
+                if (data.event === 'message_end') {
+                  this.conversationId = data.conversation_id;
+                  break;
+                }
+              } catch (e) {
+                console.warn('Failed to parse SSE data:', line);
+              }
+            }
+          }
+        }
+      } finally {
+        reader.releaseLock();
+      }
+    }
+    
+    async sendToBackendProxy(message) {
       const response = await fetch(`${this.config.backendUrl}/api/chat/stream`, {
         method: 'POST',
         headers: {
