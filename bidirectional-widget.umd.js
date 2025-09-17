@@ -64,12 +64,6 @@
           <button class="bidirectional-close">×</button>
         </div>
         <div class="bidirectional-messages" id="bidirectional-messages">
-          <div class="bidirectional-message bot-message">
-            <div class="message-content">
-              Hello! How can I help you today?
-            </div>
-            <div class="message-time">Just now</div>
-          </div>
         </div>
         <div class="bidirectional-input">
           <input type="text" id="bidirectional-input-field" placeholder="Type your message..." />
@@ -173,9 +167,10 @@
           display: flex;
           flex-direction: column;
           gap: 12px;
-          min-height: 0;
+          min-height: 200px;
           max-height: calc(500px - 120px);
           order: 2;
+          background: white;
         }
         
         .bidirectional-message {
@@ -198,6 +193,8 @@
           border-radius: 18px;
           font-size: 14px;
           line-height: 1.4;
+          word-wrap: break-word;
+          white-space: pre-wrap;
         }
         
         .bot-message .message-content {
@@ -370,15 +367,9 @@
     
     async sendMessage() {
       const inputField = this.chatPopup.querySelector('#bidirectional-input-field');
-      const sendButton = this.chatPopup.querySelector('#bidirectional-send');
       const message = inputField.value.trim();
       
       if (!message || this.isLoading) return;
-      
-      // Disable input and button while sending
-      inputField.disabled = true;
-      sendButton.disabled = true;
-      this.isLoading = true;
       
       // Add user message
       this.addMessage(message, 'user');
@@ -388,6 +379,7 @@
       this.showTypingIndicator();
       
       try {
+        this.isLoading = true;
         await this.sendToBackend(message);
       } catch (error) {
         console.error('Error sending message:', error);
@@ -395,9 +387,6 @@
       } finally {
         this.hideTypingIndicator();
         this.isLoading = false;
-        inputField.disabled = false;
-        sendButton.disabled = false;
-        this.focusInput();
       }
     }
     
@@ -411,8 +400,6 @@
     }
     
     async sendToDify(message) {
-      console.log('Sending to Dify API:', this.config.difyApiUrl);
-      
       const response = await fetch(`${this.config.difyApiUrl}/chat-messages`, {
         method: 'POST',
         headers: {
@@ -429,9 +416,7 @@
       });
       
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Dify API Error:', response.status, errorText);
-        throw new Error(`Dify API error: ${response.status} - ${errorText}`);
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
       
       const reader = response.body.getReader();
@@ -563,14 +548,10 @@
       messageDiv.appendChild(timeDiv);
       messagesContainer.appendChild(messageDiv);
       
-      // Store message in our messages array
-      this.messages.push({
-        role: sender,
-        content: text,
-        timestamp: new Date()
-      });
-      
       console.log(`Added ${sender} message:`, text);
+      console.log('Messages container children count:', messagesContainer.children.length);
+      console.log('Message element:', messageDiv);
+      
       this.scrollToBottom();
       return messageDiv;
     }
@@ -614,7 +595,9 @@
     }
     
     loadInitialMessage() {
-      // Initial message is already in the HTML
+      // Add initial message programmatically to ensure it's visible
+      const initialMessage = this.addMessage('Hello! How can I help you today?', 'bot');
+      
       this.messages.push({
         role: 'bot',
         content: 'Hello! How can I help you today?',
