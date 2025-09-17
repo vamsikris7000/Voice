@@ -81,6 +81,7 @@
         <button class="test-button" onclick="testMessage('Hello, how are you?')">Test: Hello</button>
         <button class="test-button" onclick="testMessage('escalate escalate lucifer 8016345672')">Test: Escalation</button>
         <button class="test-button" onclick="testMessage('What can you help me with?')">Test: General</button>
+        <button class="test-button" onclick="resetConversation()" style="background: #ff6b6b;">Reset Chat</button>
 
         <h2>Your Widget Script:</h2>
         <div class="code-block">
@@ -148,6 +149,16 @@
                         input.dispatchEvent(new KeyboardEvent('keypress', { key: 'Enter' }));
                     }
                 }, 500);
+            } else {
+                alert('Widget not ready yet. Please wait a moment and try again.');
+            }
+        }
+
+        // Reset conversation function
+        function resetConversation() {
+            if (window.simpleBidirectionalWidget) {
+                window.simpleBidirectionalWidget.resetConversation();
+                alert('Conversation reset! Try the escalation test again.');
             } else {
                 alert('Widget not ready yet. Please wait a moment and try again.');
             }

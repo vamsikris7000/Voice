@@ -24,7 +24,7 @@ class SimpleBidirectionalWidget {
   }
   
   generateUserId() {
-    return 'user_' + Math.random().toString(36).substr(2, 9);
+    return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
   }
   
   init() {
@@ -352,6 +352,8 @@ class SimpleBidirectionalWidget {
   
   async sendToDify(message) {
     console.log('🚀 Sending to Dify:', message);
+    console.log('👤 User ID:', this.userId);
+    console.log('💬 Conversation ID:', this.conversationId || 'NEW');
     
     const response = await fetch(`${this.config.difyApiUrl}/chat-messages`, {
       method: 'POST',
@@ -572,6 +574,23 @@ class SimpleBidirectionalWidget {
     if (this.isOpen) {
       this.closePopup();
     }
+  }
+  
+  resetConversation() {
+    this.conversationId = null;
+    this.userId = this.generateUserId();
+    this.messages = [];
+    
+    // Clear messages from UI
+    const messagesContainer = this.widget.querySelector('#simple-messages');
+    if (messagesContainer) {
+      messagesContainer.innerHTML = '';
+    }
+    
+    // Add fresh initial message
+    this.loadInitialMessage();
+    
+    console.log('🔄 Conversation reset. New User ID:', this.userId);
   }
   
   destroy() {
