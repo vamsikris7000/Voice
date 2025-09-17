@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Widget Test - Guaranteed Working</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .code-block {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: left;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        .status-box {
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 30px;
+            text-align: left;
+        }
+        .status-box h3 {
+            margin-top: 0;
+            font-size: 1.3rem;
+        }
+        .status-box pre {
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .test-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+        .test-button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Simple Widget Test</h1>
+        <p><strong>This is the GUARANTEED WORKING version!</strong></p>
+        <p>This widget is completely rewritten to ensure message visibility.</p>
+        <p>Click the chat icon in the bottom-right corner and test the escalation.</p>
+
+        <h2>Test Messages:</h2>
+        <button class="test-button" onclick="testMessage('Hello, how are you?')">Test: Hello</button>
+        <button class="test-button" onclick="testMessage('escalate escalate lucifer 8016345672')">Test: Escalation</button>
+        <button class="test-button" onclick="testMessage('What can you help me with?')">Test: General</button>
+
+        <h2>Your Widget Script:</h2>
+        <div class="code-block">
+&lt;script
+  src="https://widgetbot.netlify.app/simple-embed.js"
+  data-dify-api-url="https://d22yt2oewbcglh.cloudfront.net/v1"
+  data-dify-api-key="app-dStnyyOE9dNP6CZb0lPg3kKF"
+  data-position="bottom-right"
+  data-primary-color="#667eea"&gt;
+&lt;/script&gt;
+        </div>
+
+        <h2>Instructions:</h2>
+        <ol style="text-align: left; max-width: 600px; margin: 0 auto 30px;">
+            <li>Click the chat widget icon in the bottom-right corner.</li>
+            <li>You should see the initial greeting message immediately.</li>
+            <li>Type "escalate escalate lucifer 8016345672" and press Enter.</li>
+            <li>Watch the AI response stream in real-time.</li>
+            <li>Check the console for debug messages.</li>
+        </ol>
+
+        <div class="status-box">
+            <h3>Widget Status & Debug Info:</h3>
+            <pre id="debug-output">Waiting for widget to load...</pre>
+        </div>
+    </div>
+
+    <script>
+        // Debug logging
+        document.addEventListener('DOMContentLoaded', () => {
+            const debugOutput = document.getElementById('debug-output');
+
+            function log(message) {
+                const timestamp = new Date().toLocaleTimeString();
+                debugOutput.textContent += `\n[${timestamp}] ${message}`;
+                debugOutput.scrollTop = debugOutput.scrollHeight;
+            }
+
+            log('Page loaded. Waiting for widget...');
+
+            // Monitor widget events
+            window.addEventListener('load', () => {
+                log('Widget script loaded. Initializing...');
+                
+                // Check if widget is available
+                setTimeout(() => {
+                    if (window.simpleBidirectionalWidget) {
+                        log('✅ Simple Widget initialized successfully!');
+                        log('🎯 Widget is ready for testing');
+                    } else {
+                        log('❌ Widget not found');
+                    }
+                }, 2000);
+            });
+        });
+
+        // Test message function
+        function testMessage(message) {
+            if (window.simpleBidirectionalWidget) {
+                window.simpleBidirectionalWidget.open();
+                setTimeout(() => {
+                    const input = document.querySelector('#simple-input-field');
+                    if (input) {
+                        input.value = message;
+                        input.dispatchEvent(new KeyboardEvent('keypress', { key: 'Enter' }));
+                    }
+                }, 500);
+            } else {
+                alert('Widget not ready yet. Please wait a moment and try again.');
+            }
+        }
+    </script>
+
+    <!-- Simple Bidirectional Communications Widget Script -->
+    <script
+      src="https://widgetbot.netlify.app/simple-embed.js"
+      data-dify-api-url="https://d22yt2oewbcglh.cloudfront.net/v1"
+      data-dify-api-key="app-dStnyyOE9dNP6CZb0lPg3kKF"
+      data-position="bottom-right"
+      data-primary-color="#667eea">
+    </script>
+</body>
+</html>
