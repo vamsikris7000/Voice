@@ -242,6 +242,93 @@ class SimpleBidirectionalWidget {
           40% { transform: scale(1); }
         }
         
+        .escalation-banner {
+          background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+          color: white;
+          padding: 12px 16px;
+          margin: 8px 16px;
+          border-radius: 8px;
+          display: none;
+          align-items: center;
+          gap: 8px;
+          font-size: 14px;
+          font-weight: 600;
+          box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+          animation: escalationPulse 2s infinite;
+        }
+        
+        .escalation-banner.show {
+          display: flex;
+        }
+        
+        .escalation-icon {
+          font-size: 18px;
+          animation: bounce 1s infinite;
+        }
+        
+        @keyframes escalationPulse {
+          0%, 100% { box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3); }
+          50% { box-shadow: 0 4px 16px rgba(255, 107, 107, 0.6); }
+        }
+        
+        @keyframes bounce {
+          0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+          40% { transform: translateY(-3px); }
+          60% { transform: translateY(-2px); }
+        }
+        
+        .escalation-popup {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: white;
+          border-radius: 12px;
+          padding: 24px;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+          z-index: 1000000;
+          display: none;
+          max-width: 400px;
+          text-align: center;
+        }
+        
+        .escalation-popup.show {
+          display: block;
+          animation: popupSlide 0.3s ease-out;
+        }
+        
+        .escalation-popup h3 {
+          color: #ff6b6b;
+          margin: 0 0 16px 0;
+          font-size: 20px;
+        }
+        
+        .escalation-popup p {
+          color: #333;
+          margin: 0 0 20px 0;
+          line-height: 1.5;
+        }
+        
+        .escalation-popup button {
+          background: #ff6b6b;
+          color: white;
+          border: none;
+          padding: 12px 24px;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 14px;
+          font-weight: 600;
+        }
+        
+        .escalation-popup button:hover {
+          background: #ee5a24;
+        }
+        
+        @keyframes popupSlide {
+          from { opacity: 0; transform: translate(-50%, -60%); }
+          to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+        
         @media (max-width: 480px) {
           .simple-popup {
             width: 300px;
@@ -263,6 +350,11 @@ class SimpleBidirectionalWidget {
           <!-- Messages will be added here -->
         </div>
         
+        <div class="escalation-banner" id="escalation-banner">
+          <span class="escalation-icon">🚨</span>
+          <span>Escalated to Human Agent - You will be contacted shortly!</span>
+        </div>
+        
         <div class="typing-indicator" id="typing-indicator">
           <div class="typing-dots">
             <div class="typing-dot"></div>
@@ -275,6 +367,13 @@ class SimpleBidirectionalWidget {
           <input type="text" id="simple-input-field" placeholder="Type your message..." />
           <button id="simple-send">Send</button>
         </div>
+      </div>
+      
+      <!-- Escalation Popup -->
+      <div class="escalation-popup" id="escalation-popup">
+        <h3>🚨 Escalated to Human Agent</h3>
+        <p>Your conversation has been successfully transferred to a human agent. They will respond to you shortly with full access to your conversation history.</p>
+        <button onclick="this.parentElement.classList.remove('show')">Got it!</button>
       </div>
     `;
     
@@ -402,6 +501,11 @@ class SimpleBidirectionalWidget {
                 }
                 
                 this.updateMessage(messageElement, botMessage);
+                
+                // Check for escalation keywords
+                if (this.isEscalationMessage(botMessage)) {
+                  this.showEscalationIndicators();
+                }
               }
               
               if (data.event === 'message_end') {
@@ -466,6 +570,11 @@ class SimpleBidirectionalWidget {
                 }
                 
                 this.updateMessage(messageElement, botMessage);
+                
+                // Check for escalation keywords
+                if (this.isEscalationMessage(botMessage)) {
+                  this.showEscalationIndicators();
+                }
               }
               
               if (data.event === 'message_end') {
@@ -553,6 +662,47 @@ class SimpleBidirectionalWidget {
     }
   }
   
+  isEscalationMessage(message) {
+    const escalationKeywords = [
+      'escalated',
+      'human agent',
+      'transferred',
+      'contacted shortly',
+      'escalation',
+      'chatwoot',
+      'conversation id'
+    ];
+    
+    const lowerMessage = message.toLowerCase();
+    return escalationKeywords.some(keyword => lowerMessage.includes(keyword));
+  }
+  
+  showEscalationIndicators() {
+    console.log('🚨 Escalation detected! Showing indicators...');
+    
+    // Show banner
+    const banner = this.widget.querySelector('#escalation-banner');
+    if (banner) {
+      banner.classList.add('show');
+    }
+    
+    // Show popup after a short delay
+    setTimeout(() => {
+      const popup = this.widget.querySelector('#escalation-popup');
+      if (popup) {
+        popup.classList.add('show');
+      }
+    }, 1000);
+    
+    // Auto-hide popup after 5 seconds
+    setTimeout(() => {
+      const popup = this.widget.querySelector('#escalation-popup');
+      if (popup) {
+        popup.classList.remove('show');
+      }
+    }, 6000);
+  }
+  
   loadInitialMessage() {
     console.log('🚀 Loading initial message...');
     
@@ -585,6 +735,17 @@ class SimpleBidirectionalWidget {
     const messagesContainer = this.widget.querySelector('#simple-messages');
     if (messagesContainer) {
       messagesContainer.innerHTML = '';
+    }
+    
+    // Hide escalation indicators
+    const banner = this.widget.querySelector('#escalation-banner');
+    if (banner) {
+      banner.classList.remove('show');
+    }
+    
+    const popup = this.widget.querySelector('#escalation-popup');
+    if (popup) {
+      popup.classList.remove('show');
     }
     
     // Add fresh initial message
