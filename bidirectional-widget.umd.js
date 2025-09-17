@@ -161,16 +161,20 @@
         }
         
         .bidirectional-messages {
-          flex: 1;
-          padding: 16px;
-          overflow-y: auto;
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-          min-height: 200px;
-          max-height: calc(500px - 120px);
-          order: 2;
-          background: white;
+          flex: 1 !important;
+          padding: 16px !important;
+          overflow-y: auto !important;
+          display: flex !important;
+          flex-direction: column !important;
+          gap: 12px !important;
+          min-height: 200px !important;
+          max-height: calc(500px - 120px) !important;
+          order: 2 !important;
+          background: white !important;
+          opacity: 1 !important;
+          visibility: visible !important;
+          position: relative !important;
+          z-index: 1 !important;
         }
         
         .bidirectional-message {
@@ -533,26 +537,61 @@
         return null;
       }
       
+      // Create message with inline styles to ensure visibility
       const messageDiv = document.createElement('div');
       messageDiv.className = `bidirectional-message ${sender}-message`;
+      messageDiv.style.cssText = `
+        display: flex !important;
+        flex-direction: column !important;
+        max-width: 80% !important;
+        margin-bottom: 8px !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        position: relative !important;
+        z-index: 1 !important;
+      `;
       
       const contentDiv = document.createElement('div');
       contentDiv.className = 'message-content';
+      contentDiv.style.cssText = `
+        padding: 12px 16px !important;
+        border-radius: 18px !important;
+        font-size: 14px !important;
+        line-height: 1.4 !important;
+        word-wrap: break-word !important;
+        white-space: pre-wrap !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        ${sender === 'bot' ? 'background: #f1f3f4 !important; color: #333 !important;' : 'background: ' + this.config.primaryColor + ' !important; color: white !important;'}
+      `;
       contentDiv.textContent = text;
       
       const timeDiv = document.createElement('div');
       timeDiv.className = 'message-time';
+      timeDiv.style.cssText = `
+        font-size: 11px !important;
+        color: #666 !important;
+        margin-top: 4px !important;
+        padding: 0 4px !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+      `;
       timeDiv.textContent = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
       
       messageDiv.appendChild(contentDiv);
       messageDiv.appendChild(timeDiv);
       messagesContainer.appendChild(messageDiv);
       
-      console.log(`Added ${sender} message:`, text);
-      console.log('Messages container children count:', messagesContainer.children.length);
-      console.log('Message element:', messageDiv);
+      console.log(`✅ Added ${sender} message:`, text);
+      console.log('📊 Messages container children count:', messagesContainer.children.length);
+      console.log('🎯 Message element:', messageDiv);
+      console.log('👁️ Message visibility:', window.getComputedStyle(messageDiv).visibility);
       
-      this.scrollToBottom();
+      // Force scroll to bottom
+      setTimeout(() => {
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }, 50);
+      
       return messageDiv;
     }
     
@@ -596,18 +635,24 @@
     
     loadInitialMessage() {
       // Add initial message programmatically to ensure it's visible
-      const initialMessage = this.addMessage('Hello! How can I help you today?', 'bot');
+      console.log('🚀 Loading initial message...');
+      
+      // Force add a test message to verify visibility
+      setTimeout(() => {
+        const initialMessage = this.addMessage('Hello! How can I help you today?', 'bot');
+        console.log('📝 Initial message added:', initialMessage);
+        
+        // Add a test user message to verify both sides work
+        setTimeout(() => {
+          this.addMessage('This is a test message to verify visibility', 'user');
+        }, 1000);
+      }, 500);
       
       this.messages.push({
         role: 'bot',
         content: 'Hello! How can I help you today?',
         timestamp: new Date()
       });
-      
-      // Ensure the initial message is visible
-      setTimeout(() => {
-        this.scrollToBottom();
-      }, 100);
     }
     
     // Public API methods
