@@ -128,6 +128,7 @@
           display: none;
           flex-direction: column;
           overflow: hidden;
+          order: 1;
         }
         
         .bidirectional-popup.open {
@@ -142,6 +143,7 @@
           justify-content: space-between;
           align-items: center;
           flex-shrink: 0;
+          order: 1;
         }
         
         .bidirectional-header h3 {
@@ -173,12 +175,14 @@
           gap: 12px;
           min-height: 0;
           max-height: calc(500px - 120px);
+          order: 2;
         }
         
         .bidirectional-message {
           display: flex;
           flex-direction: column;
           max-width: 80%;
+          margin-bottom: 8px;
         }
         
         .bot-message {
@@ -220,6 +224,7 @@
           gap: 8px;
           flex-shrink: 0;
           background: white;
+          order: 3;
         }
         
         .bidirectional-input input {
@@ -279,6 +284,21 @@
         @keyframes typing {
           0%, 80%, 100% { transform: scale(0); }
           40% { transform: scale(1); }
+        }
+        
+        /* Ensure messages are visible */
+        .bidirectional-messages .bidirectional-message {
+          opacity: 1;
+          visibility: visible;
+        }
+        
+        /* Fix any potential z-index issues */
+        .bidirectional-popup {
+          z-index: 1001;
+        }
+        
+        .bidirectional-toggle {
+          z-index: 1000;
         }
         
         @media (max-width: 480px) {
@@ -581,6 +601,11 @@
         content: 'Hello! How can I help you today?',
         timestamp: new Date()
       });
+      
+      // Ensure the initial message is visible
+      setTimeout(() => {
+        this.scrollToBottom();
+      }, 100);
     }
     
     // Public API methods
